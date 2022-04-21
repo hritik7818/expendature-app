@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         accentColor: Colors.amber,
         primarySwatch: Colors.green,
+        fontFamily: "Quicksand",
       ),
       title: 'Flutter App',
     );
@@ -36,92 +37,14 @@ class _MyHomeAppState extends State<MyHomeApp> {
         });
   }
 
-  final List<Transaction> _transactions = [
-    Transaction(
-      id: "t1",
-      title: "Smartphone",
-      amount: 1000,
-      date: DateTime.now().toLocal(),
-    ),
-    Transaction(
-      id: "t2",
-      title: "Shoes",
-      amount: 7000,
-      date: DateTime.now().toLocal(),
-    ),
-    Transaction(
-      id: "t2",
-      title: "Shoes",
-      amount: 7000,
-      date: DateTime.now().toLocal(),
-    ),
-    Transaction(
-      id: "t2",
-      title: "Shoes",
-      amount: 7000,
-      date: DateTime.now().toLocal(),
-    ),
-    Transaction(
-      id: "t2",
-      title: "Shoes",
-      amount: 7000,
-      date: DateTime.now().toLocal(),
-    ),
-    Transaction(
-      id: "t2",
-      title: "Shoes",
-      amount: 7000,
-      date: DateTime.now().toLocal(),
-    ),
-    Transaction(
-      id: "t2",
-      title: "Shoes",
-      amount: 7000,
-      date: DateTime.now().toLocal(),
-    ),
-    Transaction(
-      id: "t2",
-      title: "Shoes",
-      amount: 7000,
-      date: DateTime.now().toLocal(),
-    ),
-    Transaction(
-      id: "t2",
-      title: "Shoes",
-      amount: 7000,
-      date: DateTime.now().toLocal(),
-    ),
-    Transaction(
-      id: "t2",
-      title: "Shoes",
-      amount: 7000,
-      date: DateTime.now().toLocal(),
-    ),
-    Transaction(
-      id: "t2",
-      title: "Shoes",
-      amount: 7000,
-      date: DateTime.now().toLocal(),
-    ),
-    Transaction(
-      id: "t2",
-      title: "Shoes",
-      amount: 7000,
-      date: DateTime.now().toLocal(),
-    ),
-    Transaction(
-      id: "t2",
-      title: "Shoes",
-      amount: 7000,
-      date: DateTime.now().toLocal(),
-    ),
-    Transaction(
-      id: "t2",
-      title: "Shoes",
-      amount: 7000,
-      date: DateTime.now().toLocal(),
-    ),
-  ];
+  final List<Transaction> _transactions = [];
+
+  List<Transaction> get _recentTransactions {
+    return _transactions
+        .where((element) =>
+            element.date.isAfter(DateTime.now().subtract(Duration(days: 7))))
+        .toList();
+  }
 
   void _addNewTransaction(String title, double amount) {
     setState(() {
@@ -139,6 +62,10 @@ class _MyHomeAppState extends State<MyHomeApp> {
       appBar: AppBar(
         title: Text(
           "Personal expense",
+          style: TextStyle(
+            fontFamily: "OpenSans",
+            fontWeight: FontWeight.bold,
+          ),
         ),
         actions: [
           IconButton(
@@ -152,7 +79,7 @@ class _MyHomeAppState extends State<MyHomeApp> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Chart(),
+            Chart(_recentTransactions),
             TransactionsList(_transactions),
           ],
         ),
