@@ -5,11 +5,16 @@ import '../models/transaction.dart';
 
 class TransactionsList extends StatelessWidget {
   final List<Transaction> transactions;
-  TransactionsList(this.transactions);
+  final deleteListElement;
+  TransactionsList(this.transactions, this.deleteListElement);
+
   @override
   Widget build(BuildContext context) {
+    for (var i = 0; i < transactions.length; i++) {
+      print(transactions[i].title);
+    }
     return Container(
-      height: 644,
+      height: 400,
       child: transactions.isEmpty
           ? Column(
               children: [
@@ -29,51 +34,39 @@ class TransactionsList extends StatelessWidget {
           : ListView.builder(
               itemBuilder: (ctx, index) {
                 return Card(
-                  child: Container(
-                    width: double.infinity,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 10,
-                            horizontal: 15,
-                          ),
-                          margin: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            border: Border.all(
-                                width: 2,
-                                color: Theme.of(context).primaryColor),
-                          ),
-                          child: Text(
-                            '\$${transactions[index].amount.toStringAsFixed(2)}',
-                            style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontWeight: FontWeight.bold),
+                  margin: EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 10,
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: ListTile(
+                        leading: CircleAvatar(
+                          radius: 30,
+                          child: Padding(
+                            padding: EdgeInsets.all(5),
+                            child: FittedBox(
+                              child: Text(
+                                '\u{20B9}${transactions[index].amount}',
+                              ),
+                            ),
                           ),
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              transactions[index].title,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
-                            Text(
-                              DateFormat.yMMMd()
-                                  .format(transactions[index].date),
-                              style: TextStyle(
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
+                        title: Text(
+                          transactions[index].title,
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text(
+                          DateFormat.yMMMd().format(transactions[index].date),
+                        ),
+                        trailing: IconButton(
+                          onPressed: () =>
+                              deleteListElement(transactions[index].id),
+                          icon: Icon(Icons.delete_rounded),
+                          color: Colors.red,
+                          iconSize: 25,
+                        )),
                   ),
                 );
               },

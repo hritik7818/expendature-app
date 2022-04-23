@@ -13,10 +13,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: MyHomeApp(),
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         accentColor: Colors.amber,
         primarySwatch: Colors.green,
-        fontFamily: "Quicksand",
+        fontFamily: "OpenSans",
       ),
       title: 'Flutter App',
     );
@@ -46,13 +47,20 @@ class _MyHomeAppState extends State<MyHomeApp> {
         .toList();
   }
 
-  void _addNewTransaction(String title, double amount) {
+  void _addNewTransaction(String title, double amount, DateTime date) {
     setState(() {
       _transactions.add(Transaction(
-          amount: amount,
-          title: title,
-          id: DateTime.now().toString(),
-          date: DateTime.now()));
+        amount: amount,
+        title: title,
+        id: DateTime.now().toString(),
+        date: date,
+      ));
+    });
+  }
+
+  void _deleteListElement(String id) {
+    setState(() {
+      _transactions.removeWhere((element) => element.id == id);
     });
   }
 
@@ -80,7 +88,7 @@ class _MyHomeAppState extends State<MyHomeApp> {
         child: Column(
           children: <Widget>[
             Chart(_recentTransactions),
-            TransactionsList(_transactions),
+            TransactionsList(_transactions, _deleteListElement),
           ],
         ),
       ),
