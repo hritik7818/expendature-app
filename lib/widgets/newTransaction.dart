@@ -17,11 +17,10 @@ class _NewTransactionState extends State<NewTransaction> {
 
   final _amountController = TextEditingController();
 
-  DateTime? _selectedDate;
+  DateTime _selectedDate = DateTime.now();
   void submit() {
     if (_titleController.text.isEmpty ||
-        double.parse(_amountController.text) <= 0 ||
-        _selectedDate == null) {
+        double.parse(_amountController.text) <= 0) {
       return;
     }
     widget.addNewTransaction(_titleController.text,
@@ -73,9 +72,7 @@ class _NewTransactionState extends State<NewTransaction> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                    _selectedDate == null
-                        ? "Your not choose yet"
-                        : 'picked date : ${DateFormat.yMMMd().format(_selectedDate as DateTime)}',
+                    'Picked Date : ${DateFormat.yMMMd().format(_selectedDate)}',
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,

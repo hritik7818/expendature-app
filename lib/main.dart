@@ -6,7 +6,9 @@ import './widgets/transactionsLists.dart';
 import './widgets/newTransaction.dart';
 import '../models/transaction.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -66,29 +68,45 @@ class _MyHomeAppState extends State<MyHomeApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Personal expense",
-          style: TextStyle(
-            fontFamily: "OpenSans",
-            fontWeight: FontWeight.bold,
-          ),
+    final appBar = AppBar(
+      title: Text(
+        "Personal expense",
+        style: TextStyle(
+          fontFamily: "OpenSans",
+          fontWeight: FontWeight.bold,
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              startNewTransaction(context);
-            },
-            icon: Icon(Icons.add),
-          )
-        ],
       ),
+      actions: [
+        IconButton(
+          onPressed: () {
+            startNewTransaction(context);
+          },
+          icon: Icon(Icons.add),
+        )
+      ],
+    );
+    return Scaffold(
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Chart(_recentTransactions),
-            TransactionsList(_transactions, _deleteListElement),
+            Container(
+              // MediaQuery.of(context).size.height gives a whole height of the screen from status bar to bottom.
+              // If we want to calculate the height of particular widget. we can store the widget in a variable and get its height by variableName.preferredSize.height
+              height: (MediaQuery.of(context).size.height -
+                      appBar.preferredSize.height -
+                      MediaQuery.of(context).padding.top) *
+                  .26,
+              child: Chart(_recentTransactions),
+            ),
+            Container(
+              height: (MediaQuery.of(context).size.height -
+                      appBar.preferredSize.height -
+                      MediaQuery.of(context).padding.top) *
+                  .74,
+              // color: Colors.red,
+              child: TransactionsList(_transactions, _deleteListElement),
+            ),
           ],
         ),
       ),
