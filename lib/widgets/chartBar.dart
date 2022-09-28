@@ -12,10 +12,9 @@ class ChartBar extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
+    // LayoutBuilder is used for crating responsive widgets because here we get constrains as maxHeight,min height,etc.
     return LayoutBuilder(
       builder: ((context, constraints) {
-        print('Max height : ${constraints.maxHeight}');
-        print('Min height : ${constraints.minHeight}');
         return Column(
           children: [
             //FittedBox Shrink the widget to being in their place or area.

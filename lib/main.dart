@@ -1,12 +1,21 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, sized_box_for_whitespace, deprecated_member_use
 
 import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
+
 import './widgets/chart.dart';
 import './widgets/transactionsLists.dart';
 import './widgets/newTransaction.dart';
 import '../models/transaction.dart';
 
 void main() {
+  // Using this we can force our app to work only in portrait mode and disable the landscape mode.
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  //   DeviceOrientation.portraitDown,
+  // ]);
+
   runApp(MyApp());
 }
 
@@ -15,6 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: MyHomeApp(),
+      //used to hide the debug banner for top-right bottom.
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         accentColor: Colors.amber,
@@ -66,8 +76,13 @@ class _MyHomeAppState extends State<MyHomeApp> {
     });
   }
 
+  bool _isChartToggle = false;
+
   @override
   Widget build(BuildContext context) {
+    //* Note : The build method is run again when used MediaQuery property is changed ex - when orientation is changes (portrait to landscape or landscape to portrait).
+    final orientation = MediaQuery.of(context).orientation;
+
     final appBar = AppBar(
       title: Text(
         "Personal expense",
@@ -90,23 +105,59 @@ class _MyHomeAppState extends State<MyHomeApp> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Container(
-              // MediaQuery.of(context).size.height gives a whole height of the screen from status bar to bottom.
-              // If we want to calculate the height of particular widget. we can store the widget in a variable and get its height by variableName.preferredSize.height
-              height: (MediaQuery.of(context).size.height -
-                      appBar.preferredSize.height -
-                      MediaQuery.of(context).padding.top) *
-                  .26,
-              child: Chart(_recentTransactions),
-            ),
-            Container(
-              height: (MediaQuery.of(context).size.height -
-                      appBar.preferredSize.height -
-                      MediaQuery.of(context).padding.top) *
-                  .74,
-              // color: Colors.red,
-              child: TransactionsList(_transactions, _deleteListElement),
-            ),
+            if (orientation == Orientation.landscape)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Show Chart",
+                  ),
+                  Switch(
+                      value: _isChartToggle,
+                      onChanged: (val) {
+                        setState(() {
+                          _isChartToggle = val;
+                        });
+                      }),
+                ],
+              ),
+            if (orientation == Orientation.landscape)
+              _isChartToggle
+                  ? Container(
+                      // MediaQuery.of(context).size.height gives a whole height of the screen from status bar to bottom.
+                      // If we want to calculate the height of particular widget. we can store the widget in a variable and get its height by variableName.preferredSize.height
+                      height: (MediaQuery.of(context).size.height -
+                              appBar.preferredSize.height -
+                              MediaQuery.of(context).padding.top) *
+                          .6,
+                      child: Chart(_recentTransactions),
+                    )
+                  : Container(
+                      height: (MediaQuery.of(context).size.height -
+                              appBar.preferredSize.height -
+                              MediaQuery.of(context).padding.top) *
+                          .74,
+                      // color: Colors.red,
+                      child:
+                          TransactionsList(_transactions, _deleteListElement),
+                    ),
+            if (orientation == Orientation.portrait)
+              Container(
+                height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) *
+                    .3,
+                child: Chart(_recentTransactions),
+              ),
+            if (orientation == Orientation.portrait)
+              Container(
+                height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) *
+                    .74,
+                // color: Colors.red,
+                child: TransactionsList(_transactions, _deleteListElement),
+              ),
           ],
         ),
       ),

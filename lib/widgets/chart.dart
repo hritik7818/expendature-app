@@ -39,7 +39,13 @@ class Chart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 6,
-      margin: EdgeInsets.all(20),
+      margin: EdgeInsets.only(
+        bottom: 20,
+        left: 20,
+        right: 20,
+        top:
+            MediaQuery.of(context).orientation == Orientation.portrait ? 20 : 0,
+      ),
       child: Container(
         padding: EdgeInsets.all(10),
         child: Row(
